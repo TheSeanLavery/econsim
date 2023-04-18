@@ -1,6 +1,8 @@
 import math
 import random
 import uuid
+
+import pygame
 from item import Item
 
 class Agent:
@@ -16,6 +18,7 @@ class Agent:
         self.gold = gold or random.randint(0, 1000)
         self.position = self.current_town.location.x, self.current_town.location.y
         self.destination = self.current_town.location.x, self.current_town.location.y
+        self.radius = 5 
 
     def choose_new_location(self, towns):
         current_x, current_y = self.position
@@ -53,3 +56,13 @@ class Agent:
         new_y = current_y + move_y
 
         self.position = new_x, new_y
+        
+    def contains_point(self, point):
+        agent_rect = pygame.Rect(self.position[0] - self.radius, self.position[1] - self.radius, self.radius * 2, self.radius * 2)
+        return agent_rect.collidepoint(point)
+    
+def agent_clicked(mouse_x, mouse_y, agents):
+    for agent in agents:
+        if agent.contains_point((mouse_x, mouse_y)):
+            return agent
+    return None

@@ -31,3 +31,27 @@ def move_agents(agents, locations, delta_time):  # Add delta_time parameter
         destination = agent.choose_new_location([location.town for location in locations])
         agent.move_towards_destination(destination, delta_time)
 
+def draw_screen(screen, current_town, locations, agents, font, selected_agent=None):  # Add selected_agent parameter
+    # ... other parts of the code ...
+
+    if selected_agent:
+        draw_agent_stats(screen, font, selected_agent)
+
+def draw_agent_stats(screen, font, agent):
+    stats_modal = pygame.Rect(200, 150, 400, 300)
+    pygame.draw.rect(screen, (200, 200, 200), stats_modal)
+
+    text_lines = [
+        f"GUID: {agent.guid}",
+        f"Color: {agent.color}",
+        f"Carry Weight Capacity: {agent.carry_weight_capacity}",
+        f"HP: {agent.hp}",
+        f"Level: {agent.level}",
+        f"Speed: {agent.speed}",
+        f"Items: {', '.join([item.name for item in agent.items])}",
+        f"Gold: {agent.gold}"
+    ]
+
+    for idx, line in enumerate(text_lines):
+        text_surface = font.render(line, True, (0, 0, 0))
+        screen.blit(text_surface, (210, 160 + idx * 30))

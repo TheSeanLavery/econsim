@@ -10,6 +10,8 @@ from game_draw import draw_screen, move_agents
 pygame.init()
 clock = pygame.time.Clock()
 
+
+paused = False  # Add a paused variable to track the game state
 screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption("Overworld Map Game")
 
@@ -23,13 +25,23 @@ current_town = None
 # ... other parts of the code ...
 
 
+selected_agent = None
+
 while running:
     delta_time = clock.tick(60) / 1000.0
 
     for event in pygame.event.get():
-        running, current_town = handle_event(event, current_town, locations)
+        running, current_town, selected_agent = handle_event(event, current_town, locations, agents)  # Update this line to handle the selected_agent
 
-    move_agents(agents, locations, delta_time)  # Pass delta_time here
-    draw_screen(screen, current_town, locations, agents, font)
+        if event.type == pygame.KEYDOWN:  # Check for key press events
+            if event.key == pygame.K_SPACE:  # If the space key is pressed
+                paused = not paused  # Toggle the paused state
+
+    if not paused:
+        move_agents(agents, locations, delta_time)
+
+    # Move this line outside the event loop
+    draw_screen(screen, current_town, locations, agents, font, selected_agent)  # Pass the selected_agent here
+
 
 pygame.quit()
