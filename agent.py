@@ -40,7 +40,9 @@ class Agent:
 
         distance = math.sqrt(distance_x ** 2 + distance_y ** 2)
 
-        if distance <= 1.0:
+        max_travel_distance = speed * delta_time
+        if distance <= max_travel_distance:
+            self.position = dest_x, dest_y  # Set the position to the destination to prevent overshooting
             return
 
         normalized_x = distance_x / distance
