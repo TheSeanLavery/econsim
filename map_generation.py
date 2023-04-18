@@ -18,10 +18,15 @@ def generate_locations(buffer):
             y = random.randint(100, 500)
             name = f"Location {i + 1}"
             description = f"A randomly generated location {i + 1}"
-            town = Town(f"Town {i + 1}", f"A town at location {i + 1}")
-            new_location = Location(x, y, name, description, town)
+            new_location = Location(x, y, name, description)  # Remove the town parameter
 
             if not check_overlap(new_location, locations, buffer):
                 locations.append(new_location)
                 break
     return locations
+
+def location_clicked(mouse_x, mouse_y, locations):
+    for location in locations:
+        if location.rect.collidepoint(mouse_x, mouse_y):
+            return location
+    return None
