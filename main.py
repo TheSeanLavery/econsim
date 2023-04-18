@@ -23,13 +23,17 @@ current_town = None
 # ... other parts of the code ...
 
 
+clicked_agent = None
+
 while running:
     delta_time = clock.tick(60) / 1000.0
 
     for event in pygame.event.get():
-        running, current_town = handle_event(event, current_town, locations)
+        running, current_town, clicked_agent_temp = handle_event(event, current_town, locations, agents)  # Pass agents and receive clicked_agent_temp
+        if clicked_agent_temp:
+            clicked_agent = clicked_agent_temp
 
-    move_agents(agents, locations, delta_time)  # Pass delta_time here
-    draw_screen(screen, current_town, locations, agents, font)
+    move_agents(agents, locations, delta_time)
+    draw_screen(screen, current_town, locations, agents, font, clicked_agent)  # Pass clicked_agent
 
 pygame.quit()
