@@ -2,8 +2,26 @@ import pygame
 
 def draw_screen(screen, current_town, locations, agents, font, clicked_agent=None):  # Add clicked_agent parameter
     screen.fill((0, 0, 0))
+    
+    for location in locations:
+        town = location.town
+        pygame.draw.rect(screen, town.color, location.rect)
+        
+        # Draw items as a stack on each town
+        item_offset = 0
+        for item in town.items:
+            pygame.draw.rect(screen, item.color, pygame.Rect(location.x + 10 + item_offset, location.y - 5, 5, 5))
+            item_offset += 6
+
+    # Draw agents on the overworld
+    for agent in agents:
+        agent_x, agent_y = agent.agent_position()
+        agent_color = agent.color
+        pygame.draw.circle(screen, agent_color, (agent_x, agent_y), 5)
+
     if clicked_agent:
         draw_agent_popup(screen, clicked_agent, font)
+
     if current_town:
         town_name_text = font.render(current_town.name, True, (255, 255, 255))
         town_desc_text = font.render(current_town.description, True, (255, 255, 255))
@@ -13,17 +31,9 @@ def draw_screen(screen, current_town, locations, agents, font, clicked_agent=Non
         screen.blit(town_desc_text, (350, 250))
         pygame.draw.rect(screen, (255, 0, 0), current_town.exit_button)
         screen.blit(exit_button_text, (375, 525))
-    else:
-        for location in locations:
-            pygame.draw.rect(screen, (255, 255, 255), location.rect)
-
-        # Draw agents on the overworld
-        for agent in agents:
-            agent_x, agent_y = agent.agent_position()
-            agent_color = agent.color
-            pygame.draw.circle(screen, agent_color, (agent_x, agent_y), 5)
 
     pygame.display.flip()
+
 
     
 
