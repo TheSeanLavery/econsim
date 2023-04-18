@@ -16,16 +16,29 @@ class Item:
         self.description = description
         self.value = value
 
-def generate_locations():
+def check_overlap(new_location, locations, buffer):
+    buffered_rect = new_location.rect.inflate(buffer, buffer)
+    for location in locations:
+        if buffered_rect.colliderect(location.rect):
+            return True
+    return False
+
+def generate_locations(buffer):
     locations = []
     for i in range(20):
-        x = random.randint(100, 700)
-        y = random.randint(100, 500)
-        name = f"Location {i + 1}"
-        description = f"A randomly generated location {i + 1}"
-        location = Location(x, y, name, description)
-        locations.append(location)
+        while True:
+            x = random.randint(100, 700)
+            y = random.randint(100, 500)
+            name = f"Location {i + 1}"
+            description = f"A randomly generated location {i + 1}"
+            new_location = Location(x, y, name, description)
+
+            if not check_overlap(new_location, locations, buffer):
+                locations.append(new_location)
+                break
     return locations
+
+
 
 def location_clicked(mouse_x, mouse_y, locations):
     for location in locations:
@@ -37,7 +50,7 @@ pygame.init()
 screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption("Overworld Map Game")
 
-locations = generate_locations()
+locations = generate_locations(50)
 
 running = True
 while running:
