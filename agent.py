@@ -26,7 +26,15 @@ class Agent:
             new_town = random.choice(towns)
             center_x, center_y = new_town.location.rect.center
             self.destination = center_x, center_y
+            self.pick_up_item(new_town)  # Add this line to pick up an item when choosing a new location
         return self.destination
+
+    def pick_up_item(self, town):
+        if not town.items:
+            return
+        item_to_pick = random.choice(town.items)
+        self.items.append(item_to_pick)
+        town.items.remove(item_to_pick)
     
     def agent_position(self):
         return self.position
